@@ -1,18 +1,12 @@
 import discord
+import requests
+import re
 import os
 
-HELP_MESSAGE = """
-I'm a bot used to interact with the Minecraft server!
------------------------------------------------------
+bot_token = os.getenv('BOT_TOKEN')
+api_id = os.getenv('API_ID')
 
-Example:
-    !minecraft-server <command>
-
-Commands:
-    start - Start Minecraft server
-    stop  - Stop Minecraft server
-    help - Bring up this menu
-""""
+api_url = 'https://{api_id}.execute-api.us-east-1.amazonaws.com/prod/'.format(api_id=api_id)
 
 client = discord.Client()
 
@@ -25,23 +19,22 @@ async def on_message(message):
     if message.author == client.user:
         return
 
-    if message.content.startswith('!minecraft-server'):
-        content_split = message.content.split()
-
-        if len(content_split) == 1:
-            await message.channel.send('ERROR: No input given' + HELP_MESSAGE)
+    if re.match(r'^!minecraft-server(?!\S)', message.content):
+        try:
+            command = message.content.split()[1]
+        except:
+            await message.channel.send(':angry: No input given')
             return
-
-        command = content_split[1]
 
         if command == 'start':
-            await message.channel.send('Starting Minecraft server')
+            await message.channel.send(':sunrise_over_mountains: Starting Minecraft server')
+            response = requests.post(api_url + 'start')
+            print(response)
         elif command == 'stop':
-            await message.channel.send('Stopping Minecraft server')
-        elif command == 'help':
-            await message.channel.send(HELP_MESSAGE)
+            await message.channel.send(':city_sunset: Stopping Minecraft server')
+            response = requests.post(api_url + 'stop')
+            print(response)
         else:
-            await message.channel.send("ERROR: Unknown command '{command}'".format(command=command) + HELP_MESSAGE)
-            return
+            await message.channel.send(':angry: Unknown command given')
 
-client.run(os.getenv('BOT_TOKEN'))
+client.run(bot_token)
