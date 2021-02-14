@@ -3,8 +3,8 @@ import requests
 import re
 import os
 
-bot_token = os.getenv('BOT_TOKEN')
-api_id = os.getenv('API_ID')
+bot_token = "***REMOVED***"
+api_id = "***REMOVED***"
 
 api_url = 'https://{api_id}.execute-api.us-east-1.amazonaws.com/prod/'.format(api_id=api_id)
 
@@ -27,13 +27,18 @@ async def on_message(message):
             return
 
         if command == 'start':
-            await message.channel.send(':sunrise_over_mountains: Starting Minecraft server')
             response = requests.post(api_url + 'start')
-            print(response)
+            if response.status_code == 200:
+                await message.channel.send(':sunrise_over_mountains: Starting Minecraft server')
         elif command == 'stop':
-            await message.channel.send(':city_sunset: Stopping Minecraft server')
             response = requests.post(api_url + 'stop')
-            print(response)
+            if response.status_code == 200:
+                await message.channel.send(':city_sunset: Stopping Minecraft server')
+        elif command == 'status':
+            response = requests.post(api_url + 'status')
+            if response.status_code == 200:
+                body = response.json()
+                await message.channel.send(':face_with_monocle: Minecraft server is "{status}"'.format(status=str(body)))
         else:
             await message.channel.send(':angry: Unknown command given')
 
