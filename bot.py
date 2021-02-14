@@ -38,7 +38,7 @@ async def on_message(message):
             if response.status_code == 200:
                 await message.channel.send(':city_sunset: Stopping Minecraft server')
         elif command == 'status':
-            response = requests.post(api_url + 'status')
+            response = requests.get(api_url + 'status')
             if response.status_code == 200:
                 body = response.json()
                 await message.channel.send(':face_with_monocle: Minecraft server is {status}'.format(status=str(body)))
