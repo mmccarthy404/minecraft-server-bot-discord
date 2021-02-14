@@ -38,7 +38,7 @@ async def on_message(message):
             response = requests.post(api_url + 'status')
             if response.status_code == 200:
                 body = response.json()
-                await message.channel.send(':face_with_monocle: Minecraft server is "{status}"'.format(status=str(body)))
+                await message.channel.send(':face_with_monocle: Minecraft server is {status}'.format(status=str(body)))
         else:
             await message.channel.send(':angry: Unknown command given')
 
