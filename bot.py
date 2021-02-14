@@ -3,6 +3,9 @@ import requests
 import re
 import os
 
+from dotenv import load_dotenv
+load_dotenv()
+
 bot_token = os.getenv('BOT_TOKEN')
 api_id = os.getenv('API_ID')
 
