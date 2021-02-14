@@ -3,9 +3,6 @@ import requests
 import re
 import os
 
-bot_token = "***REMOVED***"
-api_id = "***REMOVED***"
-
 api_url = 'https://{api_id}.execute-api.us-east-1.amazonaws.com/prod/'.format(api_id=api_id)
 
 client = discord.Client()
@@ -24,7 +21,7 @@ async def on_message(message):
             command = message.content.split()[1]
         except:
             await message.channel.send(':angry: No input given')
-            return
+            returns
 
         if command == 'start':
             response = requests.post(api_url + 'start')
